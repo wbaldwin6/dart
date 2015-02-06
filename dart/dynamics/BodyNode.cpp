@@ -598,46 +598,54 @@ const std::vector<size_t>& BodyNode::getDependentGenCoordIndices() const
 }
 
 //==============================================================================
-template <typename DofType, typename BnType, typename SkelType, typename JType>
-std::vector<DofType*> getDependentDofsTemplate(BnType* bn)
-{
-  std::vector<DofType*> dofs;
-  SkelType* skel = bn->getSkeleton();
-  if(!skel)
-  {
-    JType* joint = bn->getParentJoint();
-    if(!joint)
-      return dofs;
+//template <typename DofType, typename BnType, typename SkelType, typename JType>
+//std::vector<DofType*> getDependentDofsTemplate(BnType* bn)
+//{
+//  std::vector<DofType*> dofs;
+//  SkelType* skel = bn->getSkeleton();
+//  if(!skel)
+//  {
+//    JType* joint = bn->getParentJoint();
+//    if(!joint)
+//      return dofs;
 
-    size_t nDofs = joint->getNumDofs();
-    dofs.reserve(nDofs);
-    for(size_t i=0; i<nDofs; ++i)
-      dofs.push_back(joint->getDof(i));
+//    size_t nDofs = joint->getNumDofs();
+//    dofs.reserve(nDofs);
+//    for(size_t i=0; i<nDofs; ++i)
+//      dofs.push_back(joint->getDof(i));
 
-    return dofs;
-  }
+//    return dofs;
+//  }
 
-  const std::vector<size_t>& coords = bn->getDependentGenCoordIndices();
-  size_t nDofs = coords.size();
-  dofs.reserve(nDofs);
-  for(size_t i=0; i<nDofs; ++i)
-    dofs.push_back(skel->getDof(coords[i]));
+//  const std::vector<size_t>& coords = bn->getDependentGenCoordIndices();
+//  size_t nDofs = coords.size();
+//  dofs.reserve(nDofs);
+//  for(size_t i=0; i<nDofs; ++i)
+//    dofs.push_back(skel->getDof(coords[i]));
 
-  return dofs;
-}
+//  return dofs;
+//}
 
 //==============================================================================
 std::vector<DegreeOfFreedom*> BodyNode::getDependentDofs()
 {
-  return getDependentDofsTemplate<
-      DegreeOfFreedom, BodyNode, Skeleton, Joint>(this);
+//  return getDependentDofsTemplate<
+//      DegreeOfFreedom, BodyNode, Skeleton, Joint>(this);
+
+  // TODO(MXG): FIX THIS
+  std::vector<DegreeOfFreedom*> dofs;
+  return dofs;
 }
 
 //==============================================================================
 std::vector<const DegreeOfFreedom*> BodyNode::getDependentDofs() const
 {
-  return getDependentDofsTemplate<
-      const DegreeOfFreedom, const BodyNode, const Skeleton, const Joint>(this);
+//  return getDependentDofsTemplate<
+//      const DegreeOfFreedom, const BodyNode, const Skeleton, const Joint>(this);
+
+  // TODO(MXG): FIX THIS
+  std::vector<const DegreeOfFreedom*> dofs;
+  return dofs;
 }
 
 //==============================================================================
@@ -735,7 +743,9 @@ math::Jacobian BodyNode::getJacobian(const Frame* _inCoordinatesOf) const
   else if(_inCoordinatesOf->isWorld())
     return getWorldJacobian();
 
-  return math::AdRJac(getTransform(_inCoordinatesOf), getJacobian());
+//  return math::AdRJac(getTransform(_inCoordinatesOf), getJacobian());
+  // TODO(MXG): FIX THIS
+  return getJacobian();
 }
 
 //==============================================================================
@@ -759,7 +769,9 @@ math::Jacobian BodyNode::getJacobian(const Eigen::Vector3d& _offset,
   Eigen::Isometry3d T = getTransform(_inCoordinatesOf);
   T.translation() = - T.linear() * _offset;
 
-  return math::AdTJac(T, getJacobian());
+//  return math::AdTJac(T, getJacobian());
+  // TODO(MXG): FIX THIS
+  return getJacobian();
 }
 
 //==============================================================================
@@ -830,7 +842,9 @@ math::Jacobian BodyNode::getJacobianSpatialDeriv(const Frame* _inCoordinatesOf) 
   if(this == _inCoordinatesOf)
     return getJacobianSpatialDeriv();
 
-  return math::AdRJac(getTransform(_inCoordinatesOf), getJacobianSpatialDeriv());
+//  return math::AdRJac(getTransform(_inCoordinatesOf), getJacobianSpatialDeriv());
+  // TODO(MXG): FIX THIS
+  return getJacobianSpatialDeriv();
 }
 
 //==============================================================================
@@ -852,7 +866,9 @@ math::Jacobian BodyNode::getJacobianSpatialDeriv(const Eigen::Vector3d& _offset,
   Eigen::Isometry3d T = getTransform(_inCoordinatesOf);
   T.translation() = T.linear() * -_offset;
 
-  return math::AdTJac(T, getJacobianSpatialDeriv());
+//  return math::AdTJac(T, getJacobianSpatialDeriv());
+  // TODO(MXG): FIX THIS
+  return getJacobianSpatialDeriv();
 }
 
 //==============================================================================
@@ -870,8 +886,10 @@ math::Jacobian BodyNode::getJacobianClassicDeriv(const Frame* _inCoordinatesOf) 
   if(_inCoordinatesOf->isWorld())
     return getJacobianClassicDeriv();
 
-  return math::AdRInvJac(_inCoordinatesOf->getWorldTransform(),
-                         getJacobianClassicDeriv());
+//  return math::AdRInvJac(_inCoordinatesOf->getWorldTransform(),
+//                         getJacobianClassicDeriv());
+  // TODO(MXG): FIX THIS
+  return getJacobianClassicDeriv();
 }
 
 //==============================================================================
@@ -889,7 +907,9 @@ math::Jacobian BodyNode::getJacobianClassicDeriv(const Eigen::Vector3d& _offset,
   if(_inCoordinatesOf->isWorld())
     return J_d;
 
-  return math::AdRInvJac(_inCoordinatesOf->getWorldTransform(), J_d);
+//  return math::AdRInvJac(_inCoordinatesOf->getWorldTransform(), J_d);
+  // TODO(MXG): FIX THIS
+  return J_d;
 }
 
 //==============================================================================
@@ -2203,8 +2223,9 @@ void BodyNode::_updateBodyJacobianSpatialDeriv() const
     mBodyJacobianSpatialDeriv.leftCols(numParentDOFs)
         = math::AdInvTJac(mParentJoint->getLocalTransform(), dJ_parent);
 
-    mBodyJacobianSpatialDeriv -= math::adJac(getSpatialVelocity(),
-                                             getJacobian());
+//    mBodyJacobianSpatialDeriv -= math::adJac(getSpatialVelocity(),
+//                                             getJacobian());
+    // TODO(MXG): FIX THIS
   }
 
   // Local Jacobian
