@@ -1540,12 +1540,15 @@ void BodyNode::updateTransmittedForceFD()
   mF = mBiasForce;
   mF.noalias() += getArticulatedInertiaImplicit() * getSpatialAcceleration();
 
-  if(math::isNan(mF))
+  if(math::isNan(mF) || math::isInf(getSpatialAcceleration()))
   {
     std::cout << " --------- Found a NaN mF in '" << getName() << "'--------\n";
     std::cout << getArticulatedInertiaImplicit() << "\n\n"
-              << getSpatialAcceleration().transpose() << "\n\n"
-              << mF.transpose() << "\n\n -- \n";
+              << "a_total: " << getSpatialAcceleration().transpose() << "\n\n"
+              << "a_rel: " << getRelativeSpatialAcceleration().transpose() << "\n\n"
+              << "v_total: " << getSpatialVelocity().transpose() << "\n\n"
+              << "v_rel: " << getRelativeSpatialVelocity().transpose() << "\n\n"
+              << mF.transpose() << "\n\n --------- \n";
   }
 
   assert(!math::isNan(mF));
